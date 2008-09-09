@@ -36,7 +36,8 @@ $default = array(
     'test_dir'        => $pear   . DIRECTORY_SEPARATOR . 'test',
     'php_dir'         => $system . DIRECTORY_SEPARATOR . 'include',
     'www_dir'         => $system . DIRECTORY_SEPARATOR . 'docroot',
-    'temp_dir'        => '/tmp/pear',
+    'temp_dir'        => $system . DIRECTORY_SEPARATOR
+                       . 'tmp' . DIRECTORY_SEPARATOR . 'pear',
 );
 
 // merge with defaults

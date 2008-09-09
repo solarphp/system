@@ -1,0 +1,68 @@
+#!/usr/bin/env php
+<?php
+/**
+ * 
+ * Wrapper script for the pear command
+ * 
+ * You can set user-level configuration values for pear in
+ * :system/config/pear.config.php. These values are
+ * then added to the pear command with option -d.
+ * 
+ * @author Antti Holvikari <anttih@gmail.com>
+ * 
+ */
+
+// read in configuration from file
+$config = include(
+    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR
+    . 'config'                 . DIRECTORY_SEPARATOR
+    . 'pear.config.php'
+);
+
+// path to Solar-system
+$system = dirname(dirname(__FILE__));
+
+// PEAR base path
+$pear = $system  . DIRECTORY_SEPARATOR
+      . 'source' . DIRECTORY_SEPARATOR
+      . 'pear';
+
+$default = array(
+    'auto_discover'   => 0,
+    'preferred_state' => 'stable',
+    'bin_dir'         => $pear   . DIRECTORY_SEPARATOR . 'bin',
+    'doc_dir'         => $pear   . DIRECTORY_SEPARATOR . 'doc',
+    'data_dir'        => $pear   . DIRECTORY_SEPARATOR . 'data',
+    'test_dir'        => $pear   . DIRECTORY_SEPARATOR . 'test',
+    'php_dir'         => $system . DIRECTORY_SEPARATOR . 'include',
+    'www_dir'         => $system . DIRECTORY_SEPARATOR . 'docroot',
+    'temp_dir'        => '/tmp/pear',
+);
+
+// merge with defaults
+$config = array_merge($default, $config);
+
+$opts = array();
+foreach ($config as $key => $val) {
+    $opts[] = "-d $key=$val";
+}
+
+// take off "./script/pear"
+array_shift($argv);
+
+$args = implode(' ', $argv);
+
+// if pear "binary" is found in the local bin_dir
+// we'll use that. otherwise, use `env`
+$pear_bin = $config['bin_dir'] . DIRECTORY_SEPARATOR  . 'pear';
+if (! file_exists($pear_bin)) {
+    $pear_bin = '/usr/bin/env pear';
+}
+
+// build command
+$cmd = "$pear_bin " . implode(' ', $opts) . " $args";
+
+// run command
+passthru($cmd);
+
+// Done!!

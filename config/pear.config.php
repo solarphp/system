@@ -1,21 +1,19 @@
 <?php
 /**
- * 
  * Configuration file for local pear command
- * 
  */
 
-// path to Solar-system
-$system = dirname(dirname(__FILE__));
-
-// PEAR base path
-$pear = $system  . DIRECTORY_SEPARATOR
-      . 'source' . DIRECTORY_SEPARATOR
-      . 'pear';
-
+// config values to be returned
 $config = array();
 
-$config['auto_discover']   = 0;
-$config['preferred_state'] = 'stable';
+// path to Solar-system, in case we need it for configs
+$system = dirname(dirname(__FILE__));
 
+// path to pear source, in case we need it for configs
+$pear = "$system/source/pear";
+
+// be just a little verbose
+$config['verbose'] = 1;
+
+// done!
 return $config;

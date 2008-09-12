@@ -2,68 +2,106 @@
 <?php
 /**
  * 
- * Wrapper script for the pear command
+ * Wrapper script for the pear command.
  * 
- * You can set user-level configuration values for pear in
- * :system/config/pear.config.php. These values are
- * then added to the pear command with option -d.
+ * You can set your own configuration values for pear in
+ * `$system/config/pear.config.php`. These values are then added to the pear
+ * command with `-d $key=$val`.
  * 
  * @author Antti Holvikari <anttih@gmail.com>
  * 
+ * @author Paul M. Jones <pmjones@solarphp.com>
+ * 
  */
-
-// read in configuration from file
-$config = include(
-    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR
-    . 'config'                 . DIRECTORY_SEPARATOR
-    . 'pear.config.php'
-);
 
 // path to Solar-system
 $system = dirname(dirname(__FILE__));
 
-// PEAR base path
-$pear = $system  . DIRECTORY_SEPARATOR
-      . 'source' . DIRECTORY_SEPARATOR
-      . 'pear';
+// path to PEAR source files in the system
+$pear = "$system/source/pear";
 
+// the serialized file of pear-user config values
+$serial_user = "$pear/etc/user";
+
+// the serialized file of pear-system config values
+$serial_system = "$pear/etc/system";
+
+// default config values
 $default = array(
-    'auto_discover'   => 0,
-    'preferred_state' => 'stable',
-    'bin_dir'         => $pear   . DIRECTORY_SEPARATOR . 'bin',
-    'doc_dir'         => $pear   . DIRECTORY_SEPARATOR . 'doc',
-    'data_dir'        => $pear   . DIRECTORY_SEPARATOR . 'data',
-    'test_dir'        => $pear   . DIRECTORY_SEPARATOR . 'test',
-    'php_dir'         => $system . DIRECTORY_SEPARATOR . 'include',
-    'www_dir'         => $system . DIRECTORY_SEPARATOR . 'docroot',
-    'temp_dir'        => $system . DIRECTORY_SEPARATOR
-                       . 'tmp' . DIRECTORY_SEPARATOR . 'pear',
+    'auto_discover'     => 0,
+    'bin_dir'           => "$pear/bin",
+    'cache_dir'         => "$system/tmp/pear/cache",
+    'cache_ttl'         => 3600,
+    'cfg_dir'           => "$pear/cfg",
+    'data_dir'          => "$pear/data",
+    'doc_dir'           => "$pear/doc",
+    'download_dir'      => "$system/tmp/pear/download",
+    'php_dir'           => "$pear/php",
+    'preferred_state'   => "stable",
+    'temp_dir'          => "$system/tmp/pear",
+    'test_dir'          => "$pear/test",
+    'www_dir'           => "$system/docroot",
+    'default_channel'   => "pear.php.net",
+    'ext_dir'           => null,
+    'http_proxy'        => null,
+    'master_server'     => "pear.php.net",
+    'password'          => null,
+    'php_bin'           => null,
+    'php_ini'           => null,
+    'preferred_mirror'  => "pear.php.net",
+    'remote_config'     => null,
+    'sig_bin'           => null,
+    'sig_keydir'        => "$pear/etc/keys",
+    'sig_keyid'         => null,
+    'sig_type'          => "gpg",
+    'umask'             => 22,
+    'username'          => null,
+    'verbose'           => null,
 );
 
-// merge with defaults
+// read user configuration from file, and merge with default
+$config = include "$system/config/pear.config.php";
 $config = array_merge($default, $config);
 
-$opts = array();
+// create command-line options for the serialized config files
+$opts = array(
+    "-C $serial_system",
+    "-c $serial_user",
+);
+
+// create command-line options for the config values
 foreach ($config as $key => $val) {
-    $opts[] = "-d $key=$val";
+    // only create options for non-null non-false values
+    if ($val !== false && $val !== null) {
+        $val = escapeshellarg($val);
+        $opts[] = "-d $key=$val";
+    }
 }
 
-// take off "./script/pear"
+// take off "./script/pear" and retain command arguments
 array_shift($argv);
-
 $args = implode(' ', $argv);
 
-// if pear "binary" is found in the local bin_dir
-// we'll use that. otherwise, use `env`
-$pear_bin = $config['bin_dir'] . DIRECTORY_SEPARATOR  . 'pear';
-if (! file_exists($pear_bin)) {
+// if pear "binary" is found in the local bin_dir, use it.
+// otherwise, use `env` to find one.
+$pear_bin = "{$config['bin_dir']}/pear";
+if (! file_exists($pear_bin) || ! is_readable($pear_bin)) {
     $pear_bin = '/usr/bin/env pear';
 }
 
-// build command
-$cmd = "$pear_bin " . implode(' ', $opts) . " $args";
+// build the command on separate lines, in case we need to echo it
+$cmd = "$pear_bin \\\n    "
+     . implode(" \\\n    ", $opts) . " \\\n    "
+     . $args;
+
+// if we are being more than just a little verbose,
+// echo the command before executing
+if ($config['verbose'] > 1) {
+    echo "$cmd\n\n";
+}
 
 // run command
-passthru($cmd);
+passthru($cmd, $exit_code);
 
-// Done!!
+// done!
+exit($exit_code);

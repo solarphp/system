@@ -2,8 +2,8 @@
 // Solar system directory
 $system = dirname(dirname(__FILE__));
 
-// set the include-path for the system
-set_include_path(".:..:$system/include");
+// set the include-path, making special allowance for older PEAR libs
+set_include_path("$system/include:$system/source/pear/php:.");
 
 // load Solar
 require_once 'Solar.php';

@@ -18,45 +18,45 @@
 $system = dirname(dirname(__FILE__));
 
 // path to PEAR source files in the system
-$pear = "$system/source/pear";
+$pear_dir = "$system/source/pear";
 
 // the serialized file of pear-user config values
-$serial_user = "$pear/etc/user";
+$serial_user = "$pear_dir/etc/user";
 
 // the serialized file of pear-system config values
-$serial_system = "$pear/etc/system";
+$serial_system = "$pear_dir/etc/system";
 
 // default config values
 $default = array(
     'auto_discover'     => 0,
-    'bin_dir'           => "$pear/bin",
+    'bin_dir'           => "$pear_dir/bin",
     'cache_dir'         => "$system/tmp/pear/cache",
     'cache_ttl'         => 3600,
-    'cfg_dir'           => "$pear/cfg",
-    'data_dir'          => "$pear/data",
-    'doc_dir'           => "$pear/doc",
-    'download_dir'      => "$system/tmp/pear/download",
-    'php_dir'           => "$pear/php",
-    'preferred_state'   => "stable",
-    'temp_dir'          => "$system/tmp/pear",
-    'test_dir'          => "$pear/test",
-    'www_dir'           => "$system/docroot",
+    'cfg_dir'           => "$pear_dir/cfg",
+    'data_dir'          => "$pear_dir/data",
     'default_channel'   => "pear.php.net",
+    'doc_dir'           => "$pear_dir/doc",
+    'download_dir'      => "$system/tmp/pear/download",
     'ext_dir'           => null,
     'http_proxy'        => null,
     'master_server'     => "pear.php.net",
     'password'          => null,
     'php_bin'           => null,
+    'php_dir'           => "$pear_dir/php",
     'php_ini'           => null,
     'preferred_mirror'  => "pear.php.net",
+    'preferred_state'   => "stable",
     'remote_config'     => null,
     'sig_bin'           => null,
-    'sig_keydir'        => "$pear/etc/keys",
+    'sig_keydir'        => "$pear_dir/etc/keys",
     'sig_keyid'         => null,
     'sig_type'          => "gpg",
+    'temp_dir'          => "$system/tmp/pear",
+    'test_dir'          => "$pear_dir/test",
     'umask'             => 22,
     'username'          => null,
     'verbose'           => null,
+    'www_dir'           => "$system/docroot",
 );
 
 // read user configuration from file, and merge with default
@@ -82,9 +82,9 @@ foreach ($config as $key => $val) {
 array_shift($argv);
 $args = implode(' ', $argv);
 
-// if pear "binary" is found in the local bin_dir, use it.
-// otherwise, use `env` to find one.
-$pear_bin = "{$config['bin_dir']}/pear";
+// use the specialized pearsolar "binary" if it's available.
+// otherwise, use `env` to find the system-wide standard pear "binary".
+$pear_bin = "{$config['bin_dir']}/pearsolar";
 if (! file_exists($pear_bin) || ! is_readable($pear_bin)) {
     $pear_bin = '/usr/bin/env pear';
 }

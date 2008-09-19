@@ -84,7 +84,7 @@ $args = implode(' ', $argv);
 
 // use the specialized pearsolar "binary" if it's available.
 // otherwise, use `env` to find the system-wide standard pear "binary".
-$pear_bin = "{$config['bin_dir']}/pearsolar";
+$pear_bin = "{$config['bin_dir']}/pear";
 if (! file_exists($pear_bin) || ! is_readable($pear_bin)) {
     $pear_bin = '/usr/bin/env pear';
 }

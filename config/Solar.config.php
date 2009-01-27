@@ -26,6 +26,16 @@ $config['Solar']['ini_set'] = array(
 
 
 /**
+ * auto-register some default objects for common use. note that these are 
+ * lazy-loaded and only get created when called for the first time.
+ */
+$config['Solar']['registry_set'] = array(
+    'sql'  => 'Solar_Sql',
+    'user' => 'Solar_User',
+);
+
+
+/**
  * sql connection
  */
 // use sqlite by default

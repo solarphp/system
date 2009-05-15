@@ -30,8 +30,9 @@ $config['Solar']['ini_set'] = array(
  * lazy-loaded and only get created when called for the first time.
  */
 $config['Solar']['registry_set'] = array(
-    'sql'  => 'Solar_Sql',
-    'user' => 'Solar_User',
+    'sql'           => 'Solar_Sql',
+    'user'          => 'Solar_User',
+    'model_catalog' => 'Solar_Sql_Model_Catalog',
 );
 
 

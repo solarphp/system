@@ -5,13 +5,11 @@
  */
 $config = array();
 
-
 /**
  * system and autoload-include directories
  */
 $system = dirname(dirname(__FILE__));
 $config['Solar']['system']  = $system;
-
 
 /**
  * ini_set values
@@ -24,7 +22,6 @@ $config['Solar']['ini_set'] = array(
     'date.timezone'     => 'UTC',
 );
 
-
 /**
  * auto-register some default objects for common use. note that these are 
  * lazy-loaded and only get created when called for the first time.
@@ -35,28 +32,34 @@ $config['Solar']['registry_set'] = array(
     'model_catalog' => 'Solar_Sql_Model_Catalog',
 );
 
+/**
+ * sql adapter to use
+ */
+$config['Solar_Sql'] = array(
+    'adapter' => 'Solar_Sql_Adapter_Sqlite',
+);
 
 /**
- * sql connection
+ * sql adapter config for sqlite
  */
-// use sqlite by default
-$config['Solar_Sql']['adapter'] = 'Solar_Sql_Adapter_Sqlite';
-
-// sqlite config
 $config['Solar_Sql_Adapter_Sqlite'] = array(
     'name' => "$system/sqlite/solar.sq3",
     'mode' => 0775,
 );
 
+/**
+ * authentication adapter to use
+ * 
+ * use .ini file only for getting started ... passwords are stored in plain 
+ * text, not secure.
+ */
+$config['Solar_Auth'] = array(
+    'adapter' => 'Solar_Auth_Adapter_Ini',
+);
 
 /**
- * authentication
+ * authentication adapter config for .ini files
  */
-// use .ini file only for getting started ... passwords are stored in plain 
-// text, not very secure.
-$config['Solar_Auth']['adapter'] = 'Solar_Auth_Adapter_Ini';
-
-// .ini config
 $config['Solar_Auth_Adapter_Ini'] = array(
     'file' => "$system/config/auth.ini"
 );
@@ -69,6 +72,13 @@ $config['Solar_Controller_Front'] = array(
     'disable'  => array('base'),
     'default' => 'hello',
     'routing' => array(),
+);
+
+/**
+ * model catalog
+ */
+$config['Solar_Sql_Model_Catalog'] = array(
+    'classes' => 'Solar_Model',
 );
 
 /**

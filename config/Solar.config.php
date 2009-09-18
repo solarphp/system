@@ -78,7 +78,7 @@ $config['Solar_Controller_Front'] = array(
  * model catalog
  */
 $config['Solar_Sql_Model_Catalog'] = array(
-    'classes' => 'Solar_Model',
+    'classes' => array('Solar_Model'),
 );
 
 /**

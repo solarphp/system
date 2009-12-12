@@ -9,11 +9,11 @@ set_include_path("$system/include");
 require_once 'Solar.php';
 
 // start Solar with system config file
-$config = "$system/config/Solar.config.php";
+$config = "$system/config.php";
 Solar::start($config);
 
 // instantiate and run the front controller
-$front = Solar::factory('Solar_Controller_Front');
+$front = Solar_Registry::get('controller_front');
 $front->display();
 
 // Done!

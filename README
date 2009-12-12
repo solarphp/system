@@ -31,20 +31,6 @@ Alternatively, as a more-secure method, you may wish to `chown` or `chgrp`
 those files to the web server process, and set `chmod 750` on them.
 
 
-Authentication Credentials
-==========================
-
-The default authentication credentials are stored in `config/auth.ini`. They
-are:
-
-    handle: admin
-    passwd: changeme
-
-Please change them immediately. In fact, once you know how, start using
-something other than the `Solar_Auth_Adapter_Ini` class for authentication
-(e.g., using `Solar_Auth_Adapter_Htaccess` is a good next step).
-
-
 Troubleshooting
 ===============
 

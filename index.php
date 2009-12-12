@@ -20,7 +20,7 @@ set_include_path("$system/include");
 require_once 'Solar.php';
 
 // get the system config array
-$config = require "$system/config/Solar.config.php";
+$config = require "$system/config.php";
 
 // force the Action and Public URI path configs, overwriting anything from
 // the original config
@@ -38,7 +38,7 @@ $config['Solar_Uri_Public']['path'] = "$path/docroot/public";
 Solar::start($config);
 
 // instantiate and run the front controller
-$front = Solar::factory('Solar_Controller_Front');
+$front = Solar_Registry::get('controller_front');
 $front->display();
 
 // Done!

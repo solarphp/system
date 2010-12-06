@@ -24,7 +24,7 @@ include "$system/source/proxima/config/default.php";
 // database connection
 $config['Solar_Sql']['adapter'] = 'Solar_Sql_Adapter_Sqlite';
 $config['Solar_Sql_Adapter_Sqlite'] = array(
-    'file' => "$system/sqlite/proxima.sq3",
+    'name' => "$system/sqlite/proxima.sq3",
 );
 
 // front controller

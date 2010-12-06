@@ -41,8 +41,11 @@ $config['Solar_Controller_Front'] = array(
 $config['Solar_Sql_Model_Catalog']['classes'] = array('Proxima_Model');
 
 // authentication
-$config['Solar_Auth']['adapter'] = 'Solar_Auth_Adapter_Sql';
-$config['Solar_Auth_Adapter_Sql'] = array(
+$config['Solar_Auth']['storage'] = array(
+    'adapter' => 'Solar_Auth_Storage_Adapter_Sql',
+);
+
+$config['Solar_Auth_Storage_Adapter_Sql'] = array(
     'table'         => 'members',
     'handle_col'    => 'handle',
     'passwd_col'    => 'passwd',

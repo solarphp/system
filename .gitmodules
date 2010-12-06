@@ -1,3 +1,6 @@
 [submodule "source/solar"]
 	path = source/solar
 	url = git@github.com:solarphp/core.git
+[submodule "source/proxima"]
+	path = source/proxima
+	url = git@github.com:solarphp/proxima

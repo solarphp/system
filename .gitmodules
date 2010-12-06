@@ -1,0 +1,3 @@
+[submodule "source/solar"]
+	path = source/solar
+	url = git@github.com:solarphp/core.git
